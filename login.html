@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ganesh Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f3f6; /* Flipkart gray background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .login-box {
+            display: flex;
+            background: #fff;
+            width: 850px;
+            min-height: 500px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* LEFT SIDE - BLUE PANEL */
+        .login-left {
+            background-color: #2874f0; /* Flipkart Blue */
+            color: #fff;
+            width: 40%;
+            padding: 40px 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .login-left h2 { font-size: 28px; font-weight: 500; margin-bottom: 15px; margin-top: 0; }
+        .login-left p { font-size: 18px; line-height: 1.5; color: #dbe4fd; margin-top: 0; }
+        .illustration { font-size: 80px; text-align: center; margin-top: auto; }
+
+        /* RIGHT SIDE - FORM PANEL */
+        .login-right {
+            width: 60%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        .input-group input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 0;
+            font-size: 16px;
+            outline: none;
+            color: #212121;
+        }
+        .input-group input:focus { border-bottom: 2px solid #2874f0; }
+        
+        .terms {
+            font-size: 12px;
+            color: #878787;
+            margin-bottom: 20px;
+        }
+        .terms a { color: #2874f0; text-decoration: none; }
+        
+        .otp-btn {
+            background: #fb641b; /* Flipkart Orange */
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+        }
+        
+        .create-account {
+            margin-top: auto;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .create-account a { color: #2874f0; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <div class="login-left">
+            <div>
+                <h2>Login</h2>
+                <p>Get access to your Orders, Wishlist and Recommendations</p>
+            </div>
+            <div class="illustration">🛍️🛒</div>
+        </div>
+
+        <div class="login-right">
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="Enter Email/Mobile number" required>
+            </div>
+            
+            <p class="terms">By continuing, you agree to Ganesh Store's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+            
+            <button class="otp-btn" onclick="simulateLogin()">Request OTP</button>
+            
+            <div class="create-account">
+                <a href="#">New to Ganesh Store? Create an account</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateLogin() {
+            let input = document.getElementById('userInput').value;
+            
+            if(input === "") {
+                alert("Please enter a valid Email or Mobile number.");
+            } else {
+                // Simulate an OTP sent message
+                alert("OTP sent to " + input + "!\n\n(Simulation mode: You are now logged in.)");
+                
+                // Save the user in the browser's memory
+                localStorage.setItem('ganesh_user', input);
+                
+                // Redirect back to the home page
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+
+</body>
+</html>
