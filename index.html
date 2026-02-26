@@ -104,7 +104,7 @@
                   <div class="header_box">
                      <div class="lang_box ">
                         <a href="#" title="Language" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                        <img src="images/flag-uk.png" alt="flag" class="mr-2 " title="United Kingdom"> English <i class="fa fa-angle-down ml-2" aria-hidden="true"></i>
+                        <img src="images/flag-uk.png" alt="flag" class="mr-2 " title="India"> English <i class="fa fa-angle-down ml-2" aria-hidden="true"></i>
                         </a>
                         <div class="dropdown-menu ">
                            <a href="#" class="dropdown-item">
@@ -641,5 +641,22 @@
            document.getElementById("mySidenav").style.width = "0";
          }
       </script>
+      <script>
+// This function saves the item to the browser's memory (LocalStorage)
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem('ganesh_cart')) || [];
+    
+    // Check if item is already there, if yes, just increase quantity
+    let existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name: name, price: price, quantity: 1 });
+    }
+    
+    localStorage.setItem('ganesh_cart', JSON.stringify(cart));
+    alert(name + " added to cart! 🛍️");
+}
+</script>
    </body>
 </html>
