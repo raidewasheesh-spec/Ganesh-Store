@@ -1,39 +1,227 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Cart - Ganesh Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Ganesh Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .item { border-bottom: 1px solid #ccc; padding: 10px; display: flex; justify-content: space-between; }
-        .total { font-size: 20px; font-weight: bold; margin-top: 20px; }
-        button { background: #ff4757; color: white; border: none; padding: 10px; cursor: pointer; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f3f6; /* Flipkart gray background */
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            background: #2874f0; /* Flipkart blue */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .left-col { flex: 2; min-width: 300px; }
+        .right-col { flex: 1; min-width: 300px; }
+        .card {
+            background: #fff;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Cart Item Styles */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .item-name { font-size: 18px; font-weight: bold; color: #212121; margin-bottom: 10px;}
+        .item-price { font-size: 20px; font-weight: bold; color: #212121; }
+        .remove-btn {
+            background: none; border: none; color: #2874f0; 
+            font-weight: bold; cursor: pointer; padding: 0; font-size: 16px;
+        }
+        .remove-btn:hover { text-decoration: underline; }
+
+        /* Price Details Styles */
+        .price-details-title { font-size: 16px; color: #878787; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px; text-transform: uppercase;}
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 16px;}
+        .green-text { color: #388e3c; }
+        .total-row { border-top: 1px dashed #e0e0e0; padding-top: 15px; font-size: 18px; font-weight: bold; border-bottom: 1px dashed #e0e0e0; padding-bottom: 15px; margin-bottom: 15px;}
+        .place-order-btn {
+            background: #fb641b; /* Flipkart Orange */
+            color: #fff; width: 100%; padding: 15px; border: none; 
+            font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 2px;
+        }
+
+        /* Payment Form Styles */
+        #payment-section { display: none; } /* Hidden by default */
+        .payment-tabs { display: flex; border-bottom: 2px solid #2874f0; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; background: #2874f0; color: white; font-weight: bold; border-radius: 4px 4px 0 0;}
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #878787; font-size: 14px;}
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .flex-row { display: flex; gap: 10px; }
+        .pay-now-btn { background: #8bc34a; color: white; width: 100%; padding: 15px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        
+        .empty-cart { text-align: center; padding: 50px; color: #878787; font-size: 18px; }
     </style>
 </head>
 <body>
-    <h1>Your Shopping Cart 🛒</h1>
-    <div id="cart-items"></div>
-    <div class="total" id="grand-total">Total: ₹0</div>
-    <br>
-    <button onclick="alert('Redirecting to Razorpay...')">Proceed to Payment 💳</button>
+
+    <div class="header">
+        Ganesh Store - Secure Checkout
+    </div>
+
+    <div class="container">
+        <div class="left-col">
+            <div class="card" id="cart-items-container">
+                </div>
+        </div>
+
+        <div class="right-col">
+            <div class="card">
+                <div class="price-details-title">Price Details</div>
+                
+                <div class="price-row">
+                    <span>Price (<span id="total-items">0</span> items)</span>
+                    <span>₹<span id="subtotal-amount">0</span></span>
+                </div>
+                <div class="price-row">
+                    <span>Delivery Charges</span>
+                    <span class="green-text">FREE</span>
+                </div>
+                <div class="price-row">
+                    <span>Platform Fee</span>
+                    <span>₹7</span>
+                </div>
+                
+                <div class="total-row price-row">
+                    <span>Total Amount</span>
+                    <span>₹<span id="grand-total-amount">0</span></span>
+                </div>
+                
+                <div class="price-row green-text" style="font-weight: bold;">
+                    You will save delivery charges on this order!
+                </div>
+
+                <button class="place-order-btn" id="place-order-btn" onclick="showPaymentForm()">PLACE ORDER</button>
+            </div>
+
+            <div class="card" id="payment-section">
+                <div class="payment-tabs">
+                    <div class="tab">Credit / Debit Card</div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <i class="fa fa-cc-visa" style="font-size:30px; color:navy;"></i>
+                    <i class="fa fa-cc-mastercard" style="font-size:30px; color:red;"></i>
+                    <i class="fa fa-cc-amex" style="font-size:30px; color:blue;"></i>
+                </div>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="XXXX XXXX XXXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Name on Card</label>
+                    <input type="text" placeholder="Enter name">
+                </div>
+                <div class="flex-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Expiry (MM/YY)</label>
+                        <input type="text" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>CVV</label>
+                        <input type="password" placeholder="123">
+                    </div>
+                </div>
+                <button class="pay-now-btn" onclick="completePayment()">PAY NOW ₹<span id="pay-btn-amount">0</span></button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        function displayCart() {
+        // Function to load and display the cart
+        function renderCart() {
             let cart = JSON.parse(localStorage.getItem('ganesh_cart')) || [];
-            let cartDiv = document.getElementById('cart-items');
-            let total = 0;
-            cartDiv.innerHTML = '';
+            let cartContainer = document.getElementById('cart-items-container');
+            let subtotal = 0;
+            let totalItems = 0;
 
-            cart.forEach(item => {
-                total += item.price * item.quantity;
-                cartDiv.innerHTML += `
-                    <div class="item">
-                        <span>${item.name} (x${item.quantity})</span>
-                        <span>₹${item.price * item.quantity}</span>
-                    </div>`;
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<div class="empty-cart"><i class="fa fa-shopping-cart" style="font-size: 50px; margin-bottom: 20px;"></i><br>Your cart is empty! <br><br><a href="index.html" style="color:#2874f0;">Go back to shopping</a></div>';
+                document.getElementById('place-order-btn').style.display = 'none';
+                return;
+            }
+
+            cartContainer.innerHTML = ''; // Clear existing items
+
+            // Create HTML for each item
+            cart.forEach((item, index) => {
+                let itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                totalItems += item.quantity;
+
+                cartContainer.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <div class="item-name">${item.name}</div>
+                            <div style="color: #878787; margin-bottom: 10px;">Quantity: ${item.quantity}</div>
+                            <button class="remove-btn" onclick="removeItem(${index})"><i class="fa fa-trash"></i> REMOVE</button>
+                        </div>
+                        <div class="item-price">₹${itemTotal}</div>
+                    </div>
+                `;
             });
-            document.getElementById('grand-total').innerText = "Total: ₹" + total;
+
+            // Update Price Details section
+            let platformFee = 7;
+            let grandTotal = subtotal + platformFee;
+
+            document.getElementById('total-items').innerText = totalItems;
+            document.getElementById('subtotal-amount').innerText = subtotal;
+            document.getElementById('grand-total-amount').innerText = grandTotal;
+            document.getElementById('pay-btn-amount').innerText = grandTotal;
         }
-        displayCart();
+
+        // Function to remove an item
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('ganesh_cart')) || [];
+            cart.splice(index, 1); // Remove the item at this index
+            localStorage.setItem('ganesh_cart', JSON.stringify(cart)); // Save updated cart
+            renderCart(); // Reload the page view
+        }
+
+        // Function to show the payment form
+        function showPaymentForm() {
+            document.getElementById('payment-section').style.display = 'block';
+            document.getElementById('place-order-btn').style.display = 'none';
+            // Scroll to the payment section
+            document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function for fake successful payment
+        function completePayment() {
+            alert("✅ Payment Successful! Thank you for shopping at Ganesh Store.");
+            localStorage.removeItem('ganesh_cart'); // Empty the cart
+            window.location.href = "index.html"; // Send them back to home page
+        }
+
+        // Load the cart when the page opens
+        renderCart();
     </script>
+
 </body>
 </html>
