@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cart - Ganesh Store</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .item { border-bottom: 1px solid #ccc; padding: 10px; display: flex; justify-content: space-between; }
+        .total { font-size: 20px; font-weight: bold; margin-top: 20px; }
+        button { background: #ff4757; color: white; border: none; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Your Shopping Cart 🛒</h1>
+    <div id="cart-items"></div>
+    <div class="total" id="grand-total">Total: ₹0</div>
+    <br>
+    <button onclick="alert('Redirecting to Razorpay...')">Proceed to Payment 💳</button>
+
+    <script>
+        function displayCart() {
+            let cart = JSON.parse(localStorage.getItem('ganesh_cart')) || [];
+            let cartDiv = document.getElementById('cart-items');
+            let total = 0;
+            cartDiv.innerHTML = '';
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                cartDiv.innerHTML += `
+                    <div class="item">
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>₹${item.price * item.quantity}</span>
+                    </div>`;
+            });
+            document.getElementById('grand-total').innerText = "Total: ₹" + total;
+        }
+        displayCart();
+    </script>
+</body>
+</html>
